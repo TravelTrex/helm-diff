@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 set -x
 
-if [ ! -f bin/github-release ]; then
-  OS=$(uname)
-  curl -L https://github.com/aktau/github-release/releases/download/v0.7.2/$OS-amd64-github-release.tar.bz2 | tar -C bin/ -jvx --strip-components=3
+if [ ! -f /go/bin/github-release ]; then
+  go get github.com/github-release/github-release
 fi
 
 user=TravelTrex
@@ -11,8 +10,8 @@ repo=helm-diff
 tag=$1
 commit=$2
 
-bin/github-release release -u $user -r $repo -t $tag -c $commit -n $tag
+github-release release -u $user -r $repo -t $tag -c $commit -n $tag
 
 for f in $(ls release); do
-  bin/github-release upload -u $user -r $repo -t $tag -n $f -f release/$f
+  github-release upload -u $user -r $repo -t $tag -n $f -f release/$f
 done
